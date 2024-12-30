@@ -1,0 +1,21 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: backend
+  namespace: argocd  # Assuming ArgoCD is running in the 'argocd' namespace
+spec:
+  project: default  # Use the default project or specify your own
+  source:
+    repoURL: <REPO_URL>  # URL of the Helm repository or Git repo
+    targetRevision: HEAD  # Use HEAD for the latest commit, or specify a tag/branch/commit
+    path: <PATH_TO_CHART>  # If using Git, path to the chart directory
+    helm:
+      releaseName: backend  # If you want to specify the release name explicitly
+      version: <CHART_VERSION>  # Chart version to deploy
+  destination:
+    server: 'https://kubernetes.default.svc'  # This points to your local cluster
+    namespace: <DEPLOY_NAMESPACE>  # The namespace where you want to deploy
+  syncPolicy:
+    automated:  # Optional: for automatic syncing
+      selfHeal: true
+      prune: true
